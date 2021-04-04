@@ -1,3 +1,5 @@
+[![Elixir CI](https://github.com/tiago154/live_view_todos/actions/workflows/elixir.yml/badge.svg)](https://github.com/tiago154/live_view_todos/actions/workflows/elixir.yml)
+
 # LiveViewTodos
 
 ## Antes de iniciar
