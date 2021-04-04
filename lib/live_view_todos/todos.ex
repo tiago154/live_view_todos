@@ -18,6 +18,10 @@ defmodule LiveViewTodos.Todos do
     Phoenix.PubSub.broadcast(LiveViewTodos.PubSub, @topic, {__MODULE__, event, result})
   end
 
+  defp broadcast_change({:error, error}, _event) do
+    error
+  end
+
   @doc """
   Returns the list of todos.
 
@@ -28,7 +32,8 @@ defmodule LiveViewTodos.Todos do
 
   """
   def list_todos do
-    Repo.all(Todo)
+    from(t in Todo, order_by: t.title)
+    |> Repo.all()
   end
 
   @doc """
@@ -60,10 +65,14 @@ defmodule LiveViewTodos.Todos do
 
   """
   def create_todo(attrs \\ %{}) do
-    %Todo{}
-    |> Todo.changeset(attrs)
-    |> Repo.insert()
-    |> broadcast_change([:todo, :created])
+    result =
+      %Todo{}
+      |> Todo.changeset(attrs)
+      |> Repo.insert()
+
+    broadcast_change(result, [:todo, :created])
+
+    result
   end
 
   @doc """
@@ -79,10 +88,14 @@ defmodule LiveViewTodos.Todos do
 
   """
   def update_todo(%Todo{} = todo, attrs) do
-    todo
-    |> Todo.changeset(attrs)
-    |> Repo.update()
-    |> broadcast_change([:todo, :updated])
+    result =
+      todo
+      |> Todo.changeset(attrs)
+      |> Repo.update()
+
+    broadcast_change(result, [:todo, :updated])
+
+    result
   end
 
   @doc """
@@ -98,9 +111,13 @@ defmodule LiveViewTodos.Todos do
 
   """
   def delete_todo(%Todo{} = todo) do
-    todo
-    |> Repo.delete()
-    |> broadcast_change([:todo, :deleted])
+    result =
+      todo
+      |> Repo.delete()
+
+    broadcast_change(result, [:todo, :deleted])
+
+    result
   end
 
   @doc """

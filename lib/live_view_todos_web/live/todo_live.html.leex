@@ -1,4 +1,4 @@
-<form action="#" phx-submit="add">
+<form action="#" phx-submit="add" autocomplete="off">
   <%= text_input :todo, :title, placeholder: "What do you want to get done?" %>
   <%= submit "add", phx_disable_with: "Adding..." %>
 </form>
@@ -7,8 +7,10 @@
   <div>
     <%= checkbox(:todo, :done, phx_click: "toggle_done", phx_value_id: todo.id, value: todo.done) %>
     <%= todo.title %>
-    <span class="material-icons red" phx-click="delete" phx-value-id="<%= todo.id%>">
-      delete
-    </span>
+    <a href="">
+      <span class="material-icons red v-middle" phx-click="delete" phx-value-id="<%= todo.id%>">
+        delete
+      </span>
+    </a>
   </div>
 <% end %>
